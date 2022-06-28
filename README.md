@@ -11,4 +11,4 @@ SCSort: Just a bubble sort algorithm that I added in for fun :)
 
 GitHub wiki coming soon.
 
-If you find a bug, report it here or email me at: uralstech@gmail.com
+If you find a bug, feel free to report it!
