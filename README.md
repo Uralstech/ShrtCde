@@ -9,6 +9,6 @@ SCFileSystem: Helps you with opening, reading and writing files.
 
 SCSort: Just a bubble sort algorithm that I added in for fun :)
 
-GitHub wiki coming soon.
-
 If you find a bug, feel free to report it!
+
+Wiki coming soon.
