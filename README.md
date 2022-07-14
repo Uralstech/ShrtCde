@@ -1,7 +1,10 @@
 # ShrtCde (ShortCode)
 A small python library for lazy devs. This shortens the amount of code you have to write for your program with the help of functions.
 
-# INSTALLATION:
+## LICENSE
+This project uses the Apache-2.0 license. For more info, check LICENSE.
+
+## INSTALLATION
 ```
 pip install ShrtCde
 ```
@@ -48,6 +51,7 @@ input()
 ```
 
 ## EXAMPLE (UI MODULE)
+An example for the UI module.
 
 ```
 from tkinter import filedialog
@@ -110,5 +114,5 @@ root.mainloop()
 
 All examples will also be available in the GitHub repo.
 
-## GITHUB:
+### GITHUB
 https://github.com/Uralstech/ShrtCde
