@@ -27,7 +27,7 @@ def GetRoot(**kwargs):
     resizeY = False if 'resize' in kwargs and 'y' in kwargs['resize'] else True
     
     color = kwargs['color'] if 'color' in kwargs else None
-    image = kwargs['image'] if 'image' in kwargs else __filepath + r"\Data\SCUI.png"
+    image = kwargs['image'] if 'image' in kwargs else None
     mroot = kwargs['mktoplevel'] if 'mktoplevel' in kwargs else None
 
     if mroot == None: root = Tk()
@@ -156,9 +156,9 @@ def GetText(root, **kwargs):
     """
         Author: Udayshankar R
 
-        Creates and returns a Tkinter label. If image path is included, also returns image object.
+        Creates and returns a Tkinter text widget.
 
-        KWARGS: text:str, width: int, height: int, font: tkinter.font, border: int, relief: str, insertwidth: int, insertfg: str, fg: str, bg: str, highlight: str, highlightsize: int
+        KWARGS: text:str, width: int, height: int, font: tkinter.font, border: int, relief: str, insertwidth: int, insertfg: str, fg: str, bg: str, highlight: str, activehighlight: str, highlightsize: int
     """
     
     textobject = Text(root)
@@ -177,12 +177,14 @@ def GetText(root, **kwargs):
 
     relief = kwargs['relief'] if 'relief' in kwargs else None
     highlight = kwargs['highlight'] if 'highlight' in kwargs else None
+    activehighlight = kwargs['activehighlight'] if 'activehighlight' in kwargs else None
     highlightsize = kwargs['highlightsize'] if 'highlightsize' in kwargs else None
 
     textobject.config(width=width, height=height, font=font, border=border, insertwidth=insertwidth, insertbackground=insertfg, fg=fg, bg=bg)
     
     if relief != None: textobject.config(relief=relief)
     if highlight != None: textobject.config(highlightbackground=highlight)
+    if activehighlight != None: textobject.config(highlightcolor=activehighlight)
     if highlightsize != None: textobject.config(highlightthickness=highlightsize)
 
     textobject.insert('0.0', text)
@@ -195,7 +197,7 @@ def GetButton(root, **kwargs):
 
         Creates and returns a tkinter button which responds to function. If image path is included, also returns image object.
 
-        KWARGS: function: function, text:str, image: str, imagewidth: int, imageheight:int, width: int, height: int, font: tkinter.font, border: int, relief: str, fg: str, bg: str
+        KWARGS: function: function, text:str, image: str, imagewidth: int, imageheight:int, width: int, height: int, font: tkinter.font, border: int, relief: str, fg: str, bg: str, activefg: str, activebg: str
     """
 
     button = Button(root)
@@ -207,42 +209,46 @@ def GetButton(root, **kwargs):
     font = kwargs['font'] if 'font' in kwargs else GetFont()
 
     fg = kwargs['fg'] if 'fg' in kwargs else "Black"
+    activefg = kwargs['activefg'] if 'activefg' in kwargs else "Black"
 
     function = kwargs['function'] if 'function' in kwargs else None
     text = kwargs['text'] if 'text' in kwargs else None
     image = kwargs['image'] if 'image' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
     bg = kwargs['bg'] if 'bg' in kwargs else None
+    activebg = kwargs['activebg'] if 'activebg' in kwargs else None
     image_width = kwargs['imagewidth'] if 'imagewidth' in kwargs else None
     image_height = kwargs['imageheight'] if 'imageheight' in kwargs else None
 
     img = None
     if text != None:
-        button = Button(root, text=text, width=width, height=height, font=font, fg=fg, border=border)
+        button = Button(root, text=text, font=font)
     elif image != None:
         img = PhotoImage(file=image)
 
         if image_width != None: img.config(width=image_width)
         if image_height != None: img.config(height=image_height)
         
-        button = Button(root, width=width, height=height, border=border)
+        button = Button(root)
         button.config(image=img)
         button.image = img
 
+    button.config(width=width, height=height, border=border, fg=fg, activeforeground=activefg)
     if function != None: button.config(command=function)
     if relief != None: button['relief'] = relief
     if bg != None: button['bg'] = bg
+    if activebg != None: button['activebackground'] = activebg
         
     if img == None: return button
     else: return button, img
 
-def GetDropDown(root, options, **kwargs):
+def GetDropdown(root, options, **kwargs):
     """
         Author: Udayshankar R
 
         Creates and returns a tkinter dropdown with StringVar.
 
-        KWARGS: vartype: str/int/float/bool, function: function, width: int, height: int, font: tkinter.font, border: int, relief: str, fg: str, bg: str, highlight: str, highlightsize: int
+        KWARGS: vartype: str/int/float/bool, function: function, width: int, height: int, font: tkinter.font, border: int, relief: str, fg: str, bg: str, activefg: str, activebg: str, highlight: str, highlightsize: int
     """
 
     width = kwargs['width'] if 'width' in kwargs else 10
@@ -252,11 +258,13 @@ def GetDropDown(root, options, **kwargs):
     font = kwargs['font'] if 'font' in kwargs else GetFont()
 
     fg = kwargs['fg'] if 'fg' in kwargs else "Black"
+    activefg = kwargs['activefg'] if 'activefg' in kwargs else "Black"
 
     vartype = kwargs['vartype'] if 'vartype' in kwargs else None
     function = kwargs['function'] if 'function' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
     bg = kwargs['bg'] if 'bg' in kwargs else None
+    activebg = kwargs['activebg'] if 'activebg' in kwargs else None
     highlight = kwargs['highlight'] if 'highlight' in kwargs else None
     highlightsize = kwargs['highlightsize'] if 'highlightsize' in kwargs else None
 
@@ -272,10 +280,11 @@ def GetDropDown(root, options, **kwargs):
     clicked.set(options[0])
     dropdown = OptionMenu(root, clicked, *options, command=call_function)
 
-    dropdown.config(width=width, height=height, font=font, fg=fg, border=border)
+    dropdown.config(width=width, height=height, font=font, fg=fg, activeforeground=activefg, border=border)
 
     if relief != None: dropdown['relief'] = relief
     if bg != None: dropdown['bg'] = bg
+    if activebg != None: dropdown['activebackground'] = activebg
     if highlight != None: dropdown['highlightbackground'] = highlight
     if highlightsize != None: dropdown['highlightthickness'] = highlightsize
 

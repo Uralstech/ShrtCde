@@ -22,7 +22,8 @@ def fwrite(path, data, setting='w', encoding='utf8'):
     '''
 
     with open(path, setting, encoding=encoding) as file:
-        file.write(data)
+        for i in data:
+            file.write(i + '\n')
 
 
 def fexists(path: str):
