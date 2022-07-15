@@ -4,18 +4,15 @@ from tkinter.messagebox import *
 from types import FunctionType
 import os
 
-def GetRoot(**kwargs):
+def GetRoot(title='ShrtCde window', size='500x500', image=None, mktoplevel=None, **kwargs):
     """
         Author: Udayshankar R
 
         Creates a Tkinter window and returns "root".
 
-        KWARGS: title: str, size: str, minsize: str, maxsize: str, resizable: str, bg: str, image: str, mktoplevel: Tk instance
+        KWARGS: minsize: str, maxsize: str, resizable: str, bg: str
     """
 
-    title = kwargs['title'] if 'title' in kwargs else 'ShrtCde window'
-    size = kwargs['size'] if 'size' in kwargs else '500x500'
-    
     minsize = list(kwargs['minsize'].split('x')) if 'minsize' in kwargs else ['0', '0']
     for i in range(len(minsize)): minsize[i] = int(minsize[i])
     maxsize = list(kwargs['maxsize'].split('x')) if 'maxsize' in kwargs else ['0', '0']
@@ -25,11 +22,9 @@ def GetRoot(**kwargs):
     resizeY = False if 'resizable' in kwargs and 'y' in kwargs['resizable'] else True
     
     bg = kwargs['bg'] if 'bg' in kwargs else None
-    image = kwargs['image'] if 'image' in kwargs else None
-    mroot = kwargs['mktoplevel'] if 'mktoplevel' in kwargs else None
 
-    if mroot == None: root = Tk()
-    else: root = Toplevel(mroot)
+    if mktoplevel == None: root = Tk()
+    else: root = Toplevel(mktoplevel)
 
     root.title(title)
     root.geometry(size)
