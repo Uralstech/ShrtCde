@@ -7,10 +7,10 @@ img_path = filedialog.askopenfilename(title="OPEN PNG")
 
 ___example___ = lambda:showinfo("EXAMPLE", "EXAMPLE")
 
-root = GetRoot(title="EXAMPLE", size="900x900", minsize="200x200", maxsize="1200x1200", color="Yellow", image=img_path)
-toplevel1 = GetRoot(title="EXAMPLE", size="300x300", resize='x', mktoplevel=root)
-toplevel2 = GetRoot(title="EXAMPLE", size="300x300", resize='y', mktoplevel=root)
-toplevel3 = GetRoot(title="EXAMPLE", size="300x300", resize='xy', mktoplevel=root)
+root = GetRoot("EXAMPLE", "900x900", img_path, minsize="200x200", maxsize="1200x1200", color="Yellow")
+toplevel1 = GetRoot("EXAMPLE", "300x300", mktoplevel=root, resize='x')
+toplevel2 = GetRoot("EXAMPLE", "300x300", mktoplevel=root, resize='y')
+toplevel3 = GetRoot("EXAMPLE", "300x300", mktoplevel=root, resize='xy')
 GetMenu(root, {"func" : ___example___, "cascade" : {"func" : ___example___, 0:0, ("QUIT", "ctrl+q") : lambda:root.quit()}})
 
 GetLabel(root, text="label", width=20, height=2, font=GetFont("Terminal", 30, "bold", 1), border=5, relief="groove", fg="green", bg="red", highlight="blue", highlightsize=5).pack()
