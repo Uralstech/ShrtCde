@@ -1,4 +1,4 @@
-def fread(path, setting='r', encoding='utf8'):
+def readf(path, setting='r', encoding='utf8'):
     '''
         Author: Udayshankar R
     
@@ -14,7 +14,7 @@ def fread(path, setting='r', encoding='utf8'):
 
     return read
 
-def fwrite(path, data, setting='w', encoding='utf8'):
+def writef(path, data, setting='w', encoding='utf8'):
     '''
         Author: Udayshankar R
     
@@ -25,7 +25,7 @@ def fwrite(path, data, setting='w', encoding='utf8'):
         for i in data:
             file.write(i + '\n')
 
-def fexists(path: str):
+def findf(path):
     '''
         Author: Udayshankar R
     

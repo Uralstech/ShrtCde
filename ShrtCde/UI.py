@@ -2,9 +2,8 @@ from tkinter import *
 from tkinter import font as f
 from tkinter.messagebox import *
 from types import FunctionType
-import os
 
-def GetRoot(title='ShrtCde window', size='500x500', image=None, mktoplevel=None, **kwargs):
+def mkRoot(title='ShrtCde window', size='500x500', image=None, mktoplevel=None, **kwargs):
     """
         Author: Udayshankar R
 
@@ -40,8 +39,19 @@ def GetRoot(title='ShrtCde window', size='500x500', image=None, mktoplevel=None,
         root.config(bg=bg)
     
     return root
+     
+def mkFont(family="Calibri", size=15, weight="normal", underline=0, overstrike=0, slant="roman"):
+    """
+        Author: Udayshankar R
 
-def GetMenu(root, commands):
+        Creates and returns a Tkinter font. Default = Calibri.
+    """
+
+    font = f.Font(family=family, size=size, weight=weight, underline=underline, overstrike=overstrike, slant=slant)
+
+    return font
+
+def mkMenu(root, commands):
     """
         Author: Udayshankar R
 
@@ -71,45 +81,32 @@ def GetMenu(root, commands):
 
     root.config(menu=menu)
     return menu, submenus
-        
-def GetFont(family="Calibri", size=15, weight="normal", underline=0, overstrike=0, slant="roman"):
-    """
-        Author: Udayshankar R
 
-        Creates and returns a Tkinter.Font font. Default = Calibri.
-    """
-
-    font = f.Font(family=family, size=size, weight=weight, underline=underline, overstrike=overstrike, slant=slant)
-
-    return font
-
-def GetLabel(root, **kwargs):
+def mkLabel(root, text=None, image=None, **kwargs):
     """
         Author: Udayshankar R
 
         Creates and returns a Tkinter label. If image path is included, also returns image object.
 
-        KWARGS: text:str, image: str, imagewidth: int, imageheight:int, width: int, height: int, font: tkinter.font, border: int, relief: str, fg: str, bg: str, highlight: str, highlightsize: int
+        KWARGS: width: float, height: float, imgwidth: float, imgheight: float, font: tkinter.font, border: float, relief: str, fg: str, bg: str, hlcolor: str, hlsize: float
     """
     
     label = Label(root)
 
     border = kwargs['border'] if 'border' in kwargs else 1
 
-    font = kwargs['font'] if 'font' in kwargs else GetFont()
+    font = kwargs['font'] if 'font' in kwargs else mkFont()
 
     fg = kwargs['fg'] if 'fg' in kwargs else "Black"
 
     width = kwargs['width'] if 'width' in kwargs else None
     height = kwargs['height'] if 'height' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
-    text = kwargs['text'] if 'text' in kwargs else None
-    image = kwargs['image'] if 'image' in kwargs else None
-    image_width = kwargs['imagewidth'] if 'imagewidth' in kwargs else None
-    image_height = kwargs['imageheight'] if 'imageheight' in kwargs else None
+    imgwidth = kwargs['imgwidth'] if 'imgwidth' in kwargs else None
+    imgheight = kwargs['imgheight'] if 'imgheight' in kwargs else None
     bg = kwargs['bg'] if 'bg' in kwargs else None
-    highlight = kwargs['highlight'] if 'highlight' in kwargs else None
-    highlightsize = kwargs['highlightsize'] if 'highlightsize' in kwargs else None
+    hlcolor = kwargs['hlcolor'] if 'hlcolor' in kwargs else None
+    hlsize = kwargs['hlsize'] if 'hlsize' in kwargs else None
 
     img = None
     if text != None:
@@ -117,8 +114,8 @@ def GetLabel(root, **kwargs):
     elif image != None:
         img = PhotoImage(file=image)
 
-        if image_width != None: img.config(width=image_width)
-        if image_height != None: img.config(height=image_height)
+        if imgwidth != None: img.config(width=imgwidth)
+        if imgheight != None: img.config(height=imgheight)
         
         label = Label(root)
         label.config(image=img)
@@ -129,29 +126,29 @@ def GetLabel(root, **kwargs):
     if height != None: label['height'] = height
     if relief != None: label['relief'] = relief
     if bg != None: label['bg'] = bg
-    if highlight != None: label['highlightbackground'] = highlight
-    if highlightsize != None: label['highlightthickness'] = highlightsize
+    if hlcolor != None: label['highlightbackground'] = hlcolor
+    if hlsize != None: label['highlightthickness'] = hlsize
 
     if img == None: return label
     else: return label, img
 
-def GetText(root, **kwargs):
+def mkText(root, **kwargs):
     """
         Author: Udayshankar R
 
         Creates and returns a Tkinter text widget.
 
-        KWARGS: default:str, width: int, height: int, font: tkinter.font, border: int, relief: str, insertwidth: int, insertfg: str, fg: str, bg: str, highlight: str, activehighlight: str, highlightsize: int
+        KWARGS: default:str, width: float, height: float, font: tkinter.font, border: float, relief: str, cursorwidth: float, cursorfg: str, fg: str, bg: str, hlcolor: str, activehlcolor: str, hlsize: float
     """
     
-    textobject = Text(root)
+    text = Text(root)
 
     border = kwargs['border'] if 'border' in kwargs else 1
-    insertwidth = kwargs['insertwidth'] if 'insertwidth' in kwargs else 1
+    cursorwidth = kwargs['cursorwidth'] if 'cursorwidth' in kwargs else 1
 
-    font = kwargs['font'] if 'font' in kwargs else GetFont()
+    font = kwargs['font'] if 'font' in kwargs else mkFont()
 
-    insertfg = kwargs['insertfg'] if 'insertfg' in kwargs else "Black"
+    cursorfg = kwargs['cursorfg'] if 'cursorfg' in kwargs else "Black"
     fg = kwargs['fg'] if 'fg' in kwargs else "Black"
     bg = kwargs['bg'] if 'bg' in kwargs else "White"
     default = kwargs['default'] if 'default' in kwargs else ""
@@ -159,51 +156,49 @@ def GetText(root, **kwargs):
     width = kwargs['width'] if 'width' in kwargs else None
     height = kwargs['height'] if 'height' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
-    highlight = kwargs['highlight'] if 'highlight' in kwargs else None
-    activehighlight = kwargs['activehighlight'] if 'activehighlight' in kwargs else None
-    highlightsize = kwargs['highlightsize'] if 'highlightsize' in kwargs else None
+    hlcolor = kwargs['hlcolor'] if 'hlcolor' in kwargs else None
+    activehlcolor = kwargs['activehlcolor'] if 'activehlcolor' in kwargs else None
+    hlsize = kwargs['hlsize'] if 'hlsize' in kwargs else None
 
-    textobject.config(font=font, border=border, insertwidth=insertwidth, insertbackground=insertfg, fg=fg, bg=bg)
+    text.config(font=font, border=border, insertwidth=cursorwidth, insertbackground=cursorfg, fg=fg, bg=bg)
     
-    if width != None: textobject.config(width=width)
-    if height != None: textobject.config(height=height)
-    if relief != None: textobject.config(relief=relief)
-    if highlight != None: textobject.config(highlightbackground=highlight)
-    if activehighlight != None: textobject.config(highlightcolor=activehighlight)
-    if highlightsize != None: textobject.config(highlightthickness=highlightsize)
+    if width != None: text.config(width=width)
+    if height != None: text.config(height=height)
+    if relief != None: text.config(relief=relief)
+    if hlcolor != None: text.config(highlightbackground=hlcolor)
+    if activehlcolor != None: text.config(highlightcolor=activehlcolor)
+    if hlsize != None: text.config(highlightthickness=hlsize)
 
-    textobject.insert('0.0', default)
+    text.insert('0.0', default)
 
-    return textobject
+    return text
 
-def GetButton(root, **kwargs):
+def mkButton(root, text=None, image=None, **kwargs):
     """
         Author: Udayshankar R
 
         Creates and returns a tkinter button which responds to function. If image path is included, also returns image object.
 
-        KWARGS: function: function, text:str, image: str, imagewidth: int, imageheight:int, width: int, height: int, font: tkinter.font, border: int, relief: str, fg: str, bg: str, activefg: str, activebg: str
+        KWARGS: function: function, width: float, height: float, imgwidth: float, imgheight: float, font: tkinter.font, border: float, relief: str, fg: str, bg: str, activefg: str, activebg: str
     """
 
     button = Button(root)
 
     border = kwargs['border'] if 'border' in kwargs else 1
 
-    font = kwargs['font'] if 'font' in kwargs else GetFont()
+    font = kwargs['font'] if 'font' in kwargs else mkFont()
 
     fg = kwargs['fg'] if 'fg' in kwargs else "Black"
     activefg = kwargs['activefg'] if 'activefg' in kwargs else "Black"
 
     function = kwargs['function'] if 'function' in kwargs else None
-    text = kwargs['text'] if 'text' in kwargs else None
-    image = kwargs['image'] if 'image' in kwargs else None
     width = kwargs['width'] if 'width' in kwargs else None
     height = kwargs['height'] if 'height' in kwargs else None
+    imgwidth = kwargs['imgwidth'] if 'imgwidth' in kwargs else None
+    imgheight = kwargs['imgheight'] if 'imgheight' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
     bg = kwargs['bg'] if 'bg' in kwargs else None
     activebg = kwargs['activebg'] if 'activebg' in kwargs else None
-    image_width = kwargs['imagewidth'] if 'imagewidth' in kwargs else None
-    image_height = kwargs['imageheight'] if 'imageheight' in kwargs else None
 
     img = None
     if text != None:
@@ -211,8 +206,8 @@ def GetButton(root, **kwargs):
     elif image != None:
         img = PhotoImage(file=image)
 
-        if image_width != None: img.config(width=image_width)
-        if image_height != None: img.config(height=image_height)
+        if imgwidth != None: img.config(width=imgwidth)
+        if imgheight != None: img.config(height=imgheight)
         
         button = Button(root)
         button.config(image=img)
@@ -229,18 +224,18 @@ def GetButton(root, **kwargs):
     if img == None: return button
     else: return button, img
 
-def GetDropdown(root, options, **kwargs):
+def mkDropdown(root, options, **kwargs):
     """
         Author: Udayshankar R
 
         Creates and returns a tkinter dropdown with StringVar.
 
-        KWARGS: vartype: str/int/float/bool, function: function, width: int, height: int, font: tkinter.font, border: int, relief: str, fg: str, bg: str, activefg: str, activebg: str, highlight: str, highlightsize: int
+        KWARGS: vartype: str/int/float/bool, function: function, width: float, height: float, font: tkinter.font, border: float, relief: str, fg: str, bg: str, activefg: str, activebg: str, hlcolor: str, hlsize: float
     """
 
     border = kwargs['border'] if 'border' in kwargs else 1
 
-    font = kwargs['font'] if 'font' in kwargs else GetFont()
+    font = kwargs['font'] if 'font' in kwargs else mkFont()
 
     fg = kwargs['fg'] if 'fg' in kwargs else "Black"
     activefg = kwargs['activefg'] if 'activefg' in kwargs else "Black"
@@ -252,8 +247,8 @@ def GetDropdown(root, options, **kwargs):
     relief = kwargs['relief'] if 'relief' in kwargs else None
     bg = kwargs['bg'] if 'bg' in kwargs else None
     activebg = kwargs['activebg'] if 'activebg' in kwargs else None
-    highlight = kwargs['highlight'] if 'highlight' in kwargs else None
-    highlightsize = kwargs['highlightsize'] if 'highlightsize' in kwargs else None
+    hlcolor = kwargs['hlcolor'] if 'hlcolor' in kwargs else None
+    hlsize = kwargs['hlsize'] if 'hlsize' in kwargs else None
 
     if isinstance(vartype, int): clicked = IntVar()
     elif isinstance(vartype, float): clicked = DoubleVar()
@@ -274,50 +269,95 @@ def GetDropdown(root, options, **kwargs):
     if relief != None: dropdown['relief'] = relief
     if bg != None: dropdown['bg'] = bg
     if activebg != None: dropdown['activebackground'] = activebg
-    if highlight != None: dropdown['highlightbackground'] = highlight
-    if highlightsize != None: dropdown['highlightthickness'] = highlightsize
+    if hlcolor != None: dropdown['highlightbackground'] = hlcolor
+    if hlsize != None: dropdown['highlightthickness'] = hlsize
 
     dropdown.pack()
 
     return dropdown, clicked
 
-def GetEntry(root, **kwargs):
+def mkEntry(root, **kwargs):
     """
         Author: Udayshankar R
 
         Creates and returns a tkinter entry with StringVar.
 
-        KWARGS: default:str, width: int, font: tkinter.font, border: int, relief: str, insertwidth: int, insertfg: str, fg: str, bg: str, highlight: str, activehighlight: str, highlightsize: int
+        KWARGS: default:str, width: float, font: tkinter.font, border: float, relief: str, cursorwidth: float, cursorfg: str, fg: str, bg: str, hlcolor: str, activehlcolor: str, hlsize: float
     """
     
     intext = StringVar(root)
     entry = Entry(root, textvariable=intext)
 
     border = kwargs['border'] if 'border' in kwargs else 1
-    insertwidth = kwargs['insertwidth'] if 'insertwidth' in kwargs else 1
+    cursorwidth = kwargs['cursorwidth'] if 'cursorwidth' in kwargs else 1
 
-    font = kwargs['font'] if 'font' in kwargs else GetFont()
+    font = kwargs['font'] if 'font' in kwargs else mkFont()
 
     default = kwargs['default'] if 'default' in kwargs else ""
-    insertfg = kwargs['insertfg'] if 'insertfg' in kwargs else "Black"
+    cursorfg = kwargs['cursorfg'] if 'cursorfg' in kwargs else "Black"
     fg = kwargs['fg'] if 'fg' in kwargs else "Black"
 
     width = kwargs['width'] if 'width' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
     bg = kwargs['bg'] if 'bg' in kwargs else None
-    highlight = kwargs['highlight'] if 'highlight' in kwargs else None
-    activehighlight = kwargs['activehighlight'] if 'activehighlight' in kwargs else None
-    highlightsize = kwargs['highlightsize'] if 'highlightsize' in kwargs else None
+    hlcolor = kwargs['hlcolor'] if 'hlcolor' in kwargs else None
+    activehlcolor = kwargs['activehlcolor'] if 'activehlcolor' in kwargs else None
+    hlsize = kwargs['hlsize'] if 'hlsize' in kwargs else None
 
-    entry.config(width=width, font=font, border=border, insertbackground=insertfg, insertwidth=insertwidth, fg=fg)
+    entry.config(font=font, border=border, insertbackground=cursorfg, insertwidth=cursorwidth, fg=fg)
 
     if width != None: entry['width'] = width
     if relief != None: entry['relief'] = relief
     if bg != None: entry['bg'] = bg
-    if highlight != None: entry['highlightbackground'] = highlight
-    if activehighlight != None: entry['highlightcolor'] = activehighlight
-    if highlightsize != None: entry['highlightthickness'] = highlightsize
+    if hlcolor != None: entry['highlightbackground'] = hlcolor
+    if activehlcolor != None: entry['highlightcolor'] = activehlcolor
+    if hlsize != None: entry['highlightthickness'] = hlsize
 
     intext.set(default)
 
     return entry, intext
+
+def mkScale(root, start, end, orient, **kwargs):
+    """
+        Author: Udayshankar R
+
+        Creates and returns a scale widget.
+
+        KWARGS: default: float, text: str, mindist: float, width: float, length: float, font: tkinter.font, border: float, relief: str, troughcolor: str, activefg: str, fg: str, bg: str, hlcolor: str, hlsize: float
+    """
+
+    scale = Scale(root, from_=start, to=end, orient=orient)
+    
+    default = kwargs['default'] if 'default' in kwargs else 0
+    mindist = kwargs['mindist'] if 'mindist' in kwargs else 1
+    border = kwargs['border'] if 'border' in kwargs else 1
+
+    font = kwargs['font'] if 'font' in kwargs else mkFont()
+
+    text = kwargs['text'] if 'text' in kwargs else None
+    width = kwargs['width'] if 'width' in kwargs else None
+    length = kwargs['length'] if 'length' in kwargs else None
+    relief = kwargs['relief'] if 'relief' in kwargs else None
+    troughcolor = kwargs['troughcolor'] if 'troughcolor' in kwargs else None
+    activefg = kwargs['activefg'] if 'activefg' in kwargs else None
+    fg = kwargs['fg'] if 'fg' in kwargs else None
+    bg = kwargs['bg'] if 'bg' in kwargs else None
+    hlcolor = kwargs['hlcolor'] if 'hlcolor' in kwargs else None
+    hlsize = kwargs['hlsize'] if 'hlsize' in kwargs else None
+
+    scale.config(resolution=mindist, border=border, font=font)
+
+    if text != None: scale['label'] = text
+    if width != None: scale['width'] = width
+    if length != None: scale['length'] = length
+    if relief != None: scale['relief'] = relief
+    if troughcolor != None: scale['troughcolor'] = troughcolor
+    if activefg != None: scale['activebackground'] = activefg
+    if fg != None: scale['fg'] = fg
+    if bg != None: scale['bg'] = bg
+    if hlcolor != None: scale['highlightbackground'] = hlcolor
+    if hlsize != None: scale['highlightthickness'] = hlsize
+
+    scale.set(default)
+
+    return scale

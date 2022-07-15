@@ -11,8 +11,8 @@ split = " "
 data = list(data.split(sep=split))
 
 append = input("Append data? y/n: ")
-if append == 'y': readf(path, data, 'a', encoding)
-else: readf(path, data, 'w', encoding)
+if append == 'y': writef(path, data, 'a', encoding)
+else: writef(path, data, 'w', encoding)
 
 print('\n\n')
 
@@ -21,7 +21,7 @@ encoding = input("Enter encoding of data: (default: utf-8)")
 encoding = encoding if encoding != "" else "utf8"
 
 if not findf(path):
-    print("File was not found. Exiting program...")
+    print("File was not found.")
     input()
     quit()
 
