@@ -4,15 +4,13 @@ from tkinter.messagebox import *
 from types import FunctionType
 import os
 
-__filepath = os.path.abspath(os.path.dirname(__file__))
-
 def GetRoot(**kwargs):
     """
         Author: Udayshankar R
 
         Creates a Tkinter window and returns "root".
 
-        KWARGS: title: str, size: str, minsize: str, maxsize: str, resize: str, color: str, image: str, mktoplevel: Tk instance
+        KWARGS: title: str, size: str, minsize: str, maxsize: str, resizable: str, bg: str, image: str, mktoplevel: Tk instance
     """
 
     title = kwargs['title'] if 'title' in kwargs else 'ShrtCde window'
@@ -23,10 +21,10 @@ def GetRoot(**kwargs):
     maxsize = list(kwargs['maxsize'].split('x')) if 'maxsize' in kwargs else ['0', '0']
     for i in range(len(maxsize)): maxsize[i] = int(maxsize[i])
 
-    resizeX = False if 'resize' in kwargs and 'x' in kwargs['resize'] else True
-    resizeY = False if 'resize' in kwargs and 'y' in kwargs['resize'] else True
+    resizeX = False if 'resizable' in kwargs and 'x' in kwargs['resizable'] else True
+    resizeY = False if 'resizable' in kwargs and 'y' in kwargs['resizable'] else True
     
-    color = kwargs['color'] if 'color' in kwargs else None
+    bg = kwargs['bg'] if 'bg' in kwargs else None
     image = kwargs['image'] if 'image' in kwargs else None
     mroot = kwargs['mktoplevel'] if 'mktoplevel' in kwargs else None
 
@@ -43,8 +41,8 @@ def GetRoot(**kwargs):
     if image != None:
         root.iconphoto(False, PhotoImage(file = image))
 
-    if color != None:
-        root.config(bg=color)
+    if bg != None:
+        root.config(bg=bg)
     
     return root
 
@@ -79,26 +77,14 @@ def GetMenu(root, commands):
     root.config(menu=menu)
     return menu, submenus
         
-def GetFont(**kwargs):
+def GetFont(family="Calibri", size=15, weight="normal", underline=0, overstrike=0, slant="roman"):
     """
         Author: Udayshankar R
 
         Creates and returns a Tkinter.Font font. Default = Calibri.
-
-        KWARGS: family: str, size: int, weight: str, slant: str, underline: int, overstrike: int
     """
 
-    family = kwargs['family'] if 'family' in kwargs else "Calibri"
-    weight = kwargs['weight'] if 'weight' in kwargs else 'normal'
-
-    slant = kwargs['slant'] if 'slant' in kwargs else None
-
-    size = kwargs['size'] if 'size' in kwargs else 15
-    underline = kwargs['underline'] if 'underline' in kwargs else 0
-    overstrike = kwargs['overstrike'] if 'overstrike' in kwargs else 0
-
-    font = f.Font(family=family, size=size, weight=weight, underline=underline, overstrike=overstrike)
-    if slant != None: font['slant'] = slant
+    font = f.Font(family=family, size=size, weight=weight, underline=underline, overstrike=overstrike, slant=slant)
 
     return font
 
@@ -113,14 +99,14 @@ def GetLabel(root, **kwargs):
     
     label = Label(root)
 
-    width = kwargs['width'] if 'width' in kwargs else 10
-    height = kwargs['height'] if 'height' in kwargs else 1
     border = kwargs['border'] if 'border' in kwargs else 1
 
     font = kwargs['font'] if 'font' in kwargs else GetFont()
 
     fg = kwargs['fg'] if 'fg' in kwargs else "Black"
 
+    width = kwargs['width'] if 'width' in kwargs else None
+    height = kwargs['height'] if 'height' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
     text = kwargs['text'] if 'text' in kwargs else None
     image = kwargs['image'] if 'image' in kwargs else None
@@ -132,18 +118,20 @@ def GetLabel(root, **kwargs):
 
     img = None
     if text != None:
-        label = Label(root, text=text, width=width, height=height, font=font, fg=fg)
+        label = Label(root, text=text, font=font, fg=fg)
     elif image != None:
         img = PhotoImage(file=image)
 
         if image_width != None: img.config(width=image_width)
         if image_height != None: img.config(height=image_height)
         
-        label = Label(root, width=width, height=height)
+        label = Label(root)
         label.config(image=img)
         label.image = img
     
     label.config(border=border)
+    if width != None: label['width'] = width
+    if height != None: label['height'] = height
     if relief != None: label['relief'] = relief
     if bg != None: label['bg'] = bg
     if highlight != None: label['highlightbackground'] = highlight
@@ -158,13 +146,11 @@ def GetText(root, **kwargs):
 
         Creates and returns a Tkinter text widget.
 
-        KWARGS: text:str, width: int, height: int, font: tkinter.font, border: int, relief: str, insertwidth: int, insertfg: str, fg: str, bg: str, highlight: str, activehighlight: str, highlightsize: int
+        KWARGS: default:str, width: int, height: int, font: tkinter.font, border: int, relief: str, insertwidth: int, insertfg: str, fg: str, bg: str, highlight: str, activehighlight: str, highlightsize: int
     """
     
     textobject = Text(root)
 
-    width = kwargs['width'] if 'width' in kwargs else 20
-    height = kwargs['height'] if 'height' in kwargs else 10
     border = kwargs['border'] if 'border' in kwargs else 1
     insertwidth = kwargs['insertwidth'] if 'insertwidth' in kwargs else 1
 
@@ -173,21 +159,25 @@ def GetText(root, **kwargs):
     insertfg = kwargs['insertfg'] if 'insertfg' in kwargs else "Black"
     fg = kwargs['fg'] if 'fg' in kwargs else "Black"
     bg = kwargs['bg'] if 'bg' in kwargs else "White"
-    text = kwargs['text'] if 'text' in kwargs else ""
+    default = kwargs['default'] if 'default' in kwargs else ""
 
+    width = kwargs['width'] if 'width' in kwargs else None
+    height = kwargs['height'] if 'height' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
     highlight = kwargs['highlight'] if 'highlight' in kwargs else None
     activehighlight = kwargs['activehighlight'] if 'activehighlight' in kwargs else None
     highlightsize = kwargs['highlightsize'] if 'highlightsize' in kwargs else None
 
-    textobject.config(width=width, height=height, font=font, border=border, insertwidth=insertwidth, insertbackground=insertfg, fg=fg, bg=bg)
+    textobject.config(font=font, border=border, insertwidth=insertwidth, insertbackground=insertfg, fg=fg, bg=bg)
     
+    if width != None: textobject.config(width=width)
+    if height != None: textobject.config(height=height)
     if relief != None: textobject.config(relief=relief)
     if highlight != None: textobject.config(highlightbackground=highlight)
     if activehighlight != None: textobject.config(highlightcolor=activehighlight)
     if highlightsize != None: textobject.config(highlightthickness=highlightsize)
 
-    textobject.insert('0.0', text)
+    textobject.insert('0.0', default)
 
     return textobject
 
@@ -202,8 +192,6 @@ def GetButton(root, **kwargs):
 
     button = Button(root)
 
-    width = kwargs['width'] if 'width' in kwargs else 10
-    height = kwargs['height'] if 'height' in kwargs else 1
     border = kwargs['border'] if 'border' in kwargs else 1
 
     font = kwargs['font'] if 'font' in kwargs else GetFont()
@@ -214,6 +202,8 @@ def GetButton(root, **kwargs):
     function = kwargs['function'] if 'function' in kwargs else None
     text = kwargs['text'] if 'text' in kwargs else None
     image = kwargs['image'] if 'image' in kwargs else None
+    width = kwargs['width'] if 'width' in kwargs else None
+    height = kwargs['height'] if 'height' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
     bg = kwargs['bg'] if 'bg' in kwargs else None
     activebg = kwargs['activebg'] if 'activebg' in kwargs else None
@@ -233,8 +223,10 @@ def GetButton(root, **kwargs):
         button.config(image=img)
         button.image = img
 
-    button.config(width=width, height=height, border=border, fg=fg, activeforeground=activefg)
+    button.config(border=border, fg=fg, activeforeground=activefg)
     if function != None: button.config(command=function)
+    if width != None: button['width'] = width
+    if height != None: button['height'] = height
     if relief != None: button['relief'] = relief
     if bg != None: button['bg'] = bg
     if activebg != None: button['activebackground'] = activebg
@@ -251,8 +243,6 @@ def GetDropdown(root, options, **kwargs):
         KWARGS: vartype: str/int/float/bool, function: function, width: int, height: int, font: tkinter.font, border: int, relief: str, fg: str, bg: str, activefg: str, activebg: str, highlight: str, highlightsize: int
     """
 
-    width = kwargs['width'] if 'width' in kwargs else 10
-    height = kwargs['height'] if 'height' in kwargs else 1
     border = kwargs['border'] if 'border' in kwargs else 1
 
     font = kwargs['font'] if 'font' in kwargs else GetFont()
@@ -262,6 +252,8 @@ def GetDropdown(root, options, **kwargs):
 
     vartype = kwargs['vartype'] if 'vartype' in kwargs else None
     function = kwargs['function'] if 'function' in kwargs else None
+    width = kwargs['width'] if 'width' in kwargs else None
+    height = kwargs['height'] if 'height' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
     bg = kwargs['bg'] if 'bg' in kwargs else None
     activebg = kwargs['activebg'] if 'activebg' in kwargs else None
@@ -280,8 +272,10 @@ def GetDropdown(root, options, **kwargs):
     clicked.set(options[0])
     dropdown = OptionMenu(root, clicked, *options, command=call_function)
 
-    dropdown.config(width=width, height=height, font=font, fg=fg, activeforeground=activefg, border=border)
+    dropdown.config(font=font, fg=fg, activeforeground=activefg, border=border)
 
+    if width != None: dropdown['width'] = width
+    if height != None: dropdown['height'] = height
     if relief != None: dropdown['relief'] = relief
     if bg != None: dropdown['bg'] = bg
     if activebg != None: dropdown['activebackground'] = activebg
@@ -304,7 +298,6 @@ def GetEntry(root, **kwargs):
     intext = StringVar(root)
     entry = Entry(root, textvariable=intext)
 
-    width = kwargs['width'] if 'width' in kwargs else 10
     border = kwargs['border'] if 'border' in kwargs else 1
     insertwidth = kwargs['insertwidth'] if 'insertwidth' in kwargs else 1
 
@@ -314,6 +307,7 @@ def GetEntry(root, **kwargs):
     insertfg = kwargs['insertfg'] if 'insertfg' in kwargs else "Black"
     fg = kwargs['fg'] if 'fg' in kwargs else "Black"
 
+    width = kwargs['width'] if 'width' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
     bg = kwargs['bg'] if 'bg' in kwargs else None
     highlight = kwargs['highlight'] if 'highlight' in kwargs else None
@@ -322,6 +316,7 @@ def GetEntry(root, **kwargs):
 
     entry.config(width=width, font=font, border=border, insertbackground=insertfg, insertwidth=insertwidth, fg=fg)
 
+    if width != None: entry['width'] = width
     if relief != None: entry['relief'] = relief
     if bg != None: entry['bg'] = bg
     if highlight != None: entry['highlightbackground'] = highlight
