@@ -1,15 +1,50 @@
+"""
+    Author: Uralstech (Udayshankar Ravikumar)
+    
+    GitHub: https://github.com/Uralstech/ShrtCde
+
+    A UI module for Tkinter GUI.
+"""
+
 from tkinter import *
 from tkinter import font as f
 from tkinter.messagebox import *
+from typing import Literal, TypeAlias, Union
 from types import FunctionType
 
-def mkRoot(title='ShrtCde window', size='500x500', image=None, mktoplevel=None, **kwargs):
+_TKObject: TypeAlias = Union[Tk, Toplevel]
+_Rootvar: TypeAlias = Union[Tk, None]
+_Booleanvar: TypeAlias = Literal[0, 1]
+_Intvar: TypeAlias = Union[int, float]
+_Listvar: TypeAlias = Union[list, tuple]
+_Textvar: TypeAlias = Union[str, None]
+_Weightvar: TypeAlias = Literal['normal', 'bold']
+_Slantvar: TypeAlias = Literal['roman', 'italic']
+_Orientvar: TypeAlias = Literal["horizontal", "vertical"]
+
+
+def mkRoot(title='ShrtCde window', size='500x500', image: _Textvar=None, mktoplevel: _Rootvar=None, **kwargs):
     """
-        Author: Udayshankar R
+        Creates a Tkinter window and returns the Tk/Toplevel object.
 
-        Creates a Tkinter window and returns "root".
+        Parameters
+        ----------
 
-        KWARGS: minsize: str, maxsize: str, resizable: str, bg: str
+        - ``title``: (string) Title for the window.
+        - ``size``: (string) Size of the window (widthxheight).
+        - ``image``: (string) Path to image icon for the window (PNG).
+        - ``mktoplevel``: (Tk window) If not None, function will return a Toplevel window; Otherwise a Tk window.
+
+        KWARGS:
+        -------
+
+        - ``minsize``: (string) Minimum size for the window (widthxheight)
+        - ``maxsize``: (string) Maximum size for the window (widthxheight)
+        - ``resizable``: (string) Resize settings for the window.
+                - ``'x'``: (string) Makes X axis of the window non-resizable.
+                - ``'y'``: (string) Makes Y axis of the window non-resizable.
+                - ``'xy'``: (string) Makes both X and Y axis of the window non-resizable.
+        - ``bg``: (string) Background color of the window.
     """
 
     minsize = list(kwargs['minsize'].split('x')) if 'minsize' in kwargs else ['0', '0']
@@ -40,34 +75,69 @@ def mkRoot(title='ShrtCde window', size='500x500', image=None, mktoplevel=None, 
     
     return root
      
-def mkFont(family="Calibri", size=15, weight="normal", underline=0, overstrike=0, slant="roman"):
+def mkFont(family="Calibri", size=15, weight: _Weightvar="normal", slant: _Slantvar="roman", underline: _Booleanvar=0, overstrike: _Booleanvar=0) -> f.Font:
     """
-        Author: Udayshankar R
+        Creates and returns a Tkinter font object.
+        
+        Parameters
+        ----------
 
-        Creates and returns a Tkinter font. Default = Calibri.
+        - ``family``: (string) Font family for the font object.
+        - ``size``: (integer) Size for the font object.
+        - ``weight``: (string) Weight setting for the font object.
+                - 'normal': (string) Normal weight setting for the font object.
+                - 'bold': (string) Bold weight setting for the font object.
+        - ``slant``: (string) Slant setting for the font object.
+                - 'roman': (string) Normal slant setting for the font object.
+                - 'italic': (string) Italic slant setting for the font object.
+        - ``underline``: (integer) Underline setting for the font object.
+                - 0: (integer) Removes underline setting for the font object.
+                - 1: (integer) Adds underline setting for the font object.
+        - ``overstrike``: (integer) Overstrike setting for the font object.
+                - 0: (integer) Removes overstrike setting for the font object.
+                - 1: (integer) Adds overstrike setting for the font object.
     """
 
     font = f.Font(family=family, size=size, weight=weight, underline=underline, overstrike=overstrike, slant=slant)
 
     return font
 
-def mkMenu(root, commands):
+def mkMenu(root: _TKObject, commands: dict) -> tuple[Menu, list[Union[Menu, None]]]:
     """
-        Author: Udayshankar R
+        Creates a menu for the tkinter window. Returns the menu and a list of sub-menus, if any.
 
-        Creates a menu for the tkinter window.
+        Parameters
+        ----------
+
+        - ``root``: (Tk, Toplevel) Window object to which the menu will be attached.
+        - ``command``: (dictionary) Dictionary with Name-Command pairs for the menu.
+            - Example:
+                - ``{"foo" : bar}``
+                    - Creates item 'foo' which calls 'bar', a predefined function.
+                - ``{"cascade" : {"foo" : bar}}``
+                    - Creates a cacade menu called 'cascade' with item 'foo' which calls 'bar'.
+                - ``{"cascade" : {"foo" : bar, 0:0, "quit" : bar}}``
+                    - Creates seperator at '0:0' item in 'cascade'.
+                - ``{"cascade" : {("foo", "faa") : bar}}``
+                    - Creates item 'foo' with accelerator 'faa' which calls 'bar'.
+        
+        Confused? Try this snippet::
+
+            from ShrtCde.UI import *
+            func = lambda: print("foo")
+
+            root = mkRoot()
+            mkMenu(root, {"foo" : func, "cascade" : {"foo" : func, 0:0, ("foo", "faa") : func}})
+            root.mainloop()
+                        
     """
     
     menu = Menu(root)
 
-    # example
-    # {"func" : lambda:print("lol"), "cascade" : {"func" : lambda:print("lol"), 0:0, ("func", "ctrl+lol") : lambda:print("lol")}}
-    
     submenus = []
     if commands != {} and commands != None:
         for i in commands.keys():
-            if isinstance(commands[i], FunctionType):
-                menu.add_command(label=str(i), command=commands[i])
+            if isinstance(commands[i], FunctionType): menu.add_command(label=str(i), command=commands[i])
             elif isinstance(commands[i], dict):
                 submenu = Menu(menu, tearoff=0)
                 for j in commands[i].keys():
@@ -82,13 +152,38 @@ def mkMenu(root, commands):
     root.config(menu=menu)
     return menu, submenus
 
-def mkLabel(root, text=None, image=None, **kwargs):
+def mkLabel(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwargs):
     """
-        Author: Udayshankar R
-
         Creates and returns a Tkinter label. If image path is included, also returns image object.
 
-        KWARGS: width: float, height: float, imgwidth: float, imgheight: float, font: tkinter.font, border: float, relief: str, fg: str, bg: str, hlcolor: str, hlsize: float
+        Parameters
+        ----------
+
+        - ``root``: (Tk, Toplevel) Window object to display the label on.
+        - ``text``: (string) Text to display on the label.
+        - ``image``: (string) Path to an image to display on the label.
+        - NOTE: Only use text OR image. Both cannot be used.
+
+        KWARGS:
+        -------
+
+        - ``width``: (float) Width of the label.
+        - ``height``: (float) Height of the label.
+        - ``imgwidth``: (float) Width of the label's image.
+        - ``imgheight``: (float) Height of the label's image.
+        - ``font``: (tkinter font) Font for the label's text.
+        - ``border``: (float) Size of the label's border.
+        - ``relief``: (string) Relief setting of the label. See tkinter manual.
+                - ``'raised'``
+                - ``'sunken'``
+                - ``'flat'`` 
+                - ``'ridge'``
+                - ``'solid'``
+                - ``'groove'``
+        - ``fg``: (string) Color of the label's foreground.
+        - ``bg``: (string) Color of the label's background.
+        - ``hlcolor``: (string) Color of the label's highlight.
+        - ``hlsize``: (float) Size of the label's highlight.
     """
     
     label = Label(root)
@@ -132,13 +227,37 @@ def mkLabel(root, text=None, image=None, **kwargs):
     if img == None: return label
     else: return label, img
 
-def mkText(root, **kwargs):
+def mkText(root: _TKObject, **kwargs):
     """
-        Author: Udayshankar R
-
         Creates and returns a Tkinter text widget.
 
-        KWARGS: default:str, width: float, height: float, font: tkinter.font, border: float, relief: str, cursorwidth: float, cursorfg: str, fg: str, bg: str, hlcolor: str, activehlcolor: str, hlsize: float
+        Parameters
+        ----------
+
+        - ``root``: (Tk, Toplevel) Window object to display the Text object on.
+
+        KWARGS:
+        -------
+
+        - ``default``: (string) Default text for the Text object.
+        - ``width``: (float) Width of the Text object.
+        - ``height``: (float) Height of the Text object.
+        - ``font``: (tkinter font) Font for the Text object's text.
+        - ``border``: (float) Size of the Text object's border.
+        - ``relief``: (string) Relief setting of the Text object. See tkinter manual.
+                - ``'raised'``
+                - ``'sunken'``
+                - ``'flat'`` 
+                - ``'ridge'``
+                - ``'solid'``
+                - ``'groove'``
+        - ``cursorwidth``: (float) Width of the Text object's cursor.
+        - ``cursorfg``: (string) Color of the Text object's cursor.
+        - ``fg``: (string) Color of the Text object's foreground.
+        - ``bg``: (string) Color of the Text object's background.
+        - ``hlcolor``: (string) Color of the Text object's highlight.
+        - ``activehlcolor``: (string) Color of the Text object's highlight when active.
+        - ``hlsize``: (float) Size of the Text object's highlight.
     """
     
     text = Text(root)
@@ -173,13 +292,39 @@ def mkText(root, **kwargs):
 
     return text
 
-def mkButton(root, text=None, image=None, **kwargs):
+def mkButton(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwargs):
     """
-        Author: Udayshankar R
+        Creates and returns a tkinter button. If image path is included, also returns image object.
 
-        Creates and returns a tkinter button which responds to function. If image path is included, also returns image object.
+        Parameters
+        ----------
 
-        KWARGS: function: function, width: float, height: float, imgwidth: float, imgheight: float, font: tkinter.font, border: float, relief: str, fg: str, bg: str, activefg: str, activebg: str
+        - ``root``: (Tk, Toplevel) Window object to display the button on.
+        - ``text``: (string) Text to display on the button.
+        - ``image``: (string) Path to an image to display on the button.
+        - NOTE: Only use text OR image. Both cannot be used.
+
+        KWARGS:
+        -------
+
+        - ``function``: (function) Function to assign to the button.
+        - ``width``: (float) Width of the button.
+        - ``height``: (float) Height of the button.
+        - ``imgwidth``: (float) Width of the button's image.
+        - ``imgheight``: (float) Height of the button's image.
+        - ``font``: (tkinter font) Font for the button's text.
+        - ``border``: (float) Size of the button's border.
+        - ``relief``: (string) Relief setting of the button. See tkinter manual.
+                - ``'raised'``
+                - ``'sunken'``
+                - ``'flat'`` 
+                - ``'ridge'``
+                - ``'solid'``
+                - ``'groove'``
+        - ``fg``: (string) Color of the button's foreground.
+        - ``bg``: (string) Color of the button's background.
+        - ``activefg``: (string) Color of the button's foreground when active.
+        - ``activebg``: (string) Color of the button's background when active.
     """
 
     button = Button(root)
@@ -224,13 +369,43 @@ def mkButton(root, text=None, image=None, **kwargs):
     if img == None: return button
     else: return button, img
 
-def mkDropdown(root, options, **kwargs):
+def mkDropdown(root: _TKObject, options: _Listvar, **kwargs):
     """
-        Author: Udayshankar R
+        Creates and returns a tkinter dropdown with StringVar/IntVar/DoubleVar/BooleanVar.
 
-        Creates and returns a tkinter dropdown with StringVar.
+        
+        Parameters
+        ----------
 
-        KWARGS: vartype: str/int/float/bool, function: function, width: float, height: float, font: tkinter.font, border: float, relief: str, fg: str, bg: str, activefg: str, activebg: str, hlcolor: str, hlsize: float
+        - ``root``: (Tk, Toplevel) Window object to display the dropdown on.
+        - ``options``: (list/tuple) Options for the dropdown.
+
+        KWARGS:
+        -------
+
+        - ``vartype``: (string/integer/float) Object to tell the function what type of var to return.
+            - ``None``/string: Tells function to return StringVar.
+            - integer: Tells function to return IntVar.
+            - float: Tells function to return FloatVar.
+            - ``'BOOL'``: (string) Tells function to return BooleanVar.
+        - ``function``: (function) Function to assign to the dropdown.
+        - ``width``: (float) Width of the dropdown.
+        - ``height``: (float) Height of the dropdown.
+        - ``font``: (tkinter font) Font for the dropdown's text.
+        - ``border``: (float) Size of the dropdown's border.
+        - ``relief``: (string) Relief setting of the dropdown. See tkinter manual.
+                - ``'raised'``
+                - ``'sunken'``
+                - ``'flat'`` 
+                - ``'ridge'``
+                - ``'solid'``
+                - ``'groove'``
+        - ``fg``: (string) Color of the dropdown's foreground.
+        - ``bg``: (string) Color of the dropdown's background.
+        - ``activefg``: (string) Color of the dropdown's foreground when active.
+        - ``activebg``: (string) Color of the dropdown's background when active.
+        - ``hlcolor``: (string) Color of the dropdown's highlight.
+        - ``hlsize``: (float) Size of the dropdown's highlight.
     """
 
     border = kwargs['border'] if 'border' in kwargs else 1
@@ -276,13 +451,39 @@ def mkDropdown(root, options, **kwargs):
 
     return dropdown, clicked
 
-def mkEntry(root, **kwargs):
+def mkEntry(root: _TKObject, **kwargs):
     """
-        Author: Udayshankar R
-
         Creates and returns a tkinter entry with StringVar.
+        
+        Parameters
+        ----------
 
-        KWARGS: default:str, width: float, font: tkinter.font, border: float, relief: str, cursorwidth: float, cursorfg: str, fg: str, bg: str, hlcolor: str, activehlcolor: str, hlsize: float
+        - ``root``: (Tk, Toplevel) Window object to display the Text object on.
+
+        KWARGS:
+        -------
+
+        - ``default``: (string) Default text for the entry.
+        - ``show``: (string) Character to show in place of actual entered characters in the entry.
+            - Example:
+                - ``show='*'``: Every character entered in the entry will be replaced with the *.
+        - ``width``: (float) Width of the entry.
+        - ``font``: (tkinter font) Font for the entry's text.
+        - ``border``: (float) Size of the entry's border.
+        - ``relief``: (string) Relief setting of the entry. See tkinter manual.
+                - ``'raised'``
+                - ``'sunken'``
+                - ``'flat'`` 
+                - ``'ridge'``
+                - ``'solid'``
+                - ``'groove'``
+        - ``cursorwidth``: (float) Width of the entry's cursor.
+        - ``cursorfg``: (string) Color of the entry's cursor.
+        - ``fg``: (string) Color of the entry's foreground.
+        - ``bg``: (string) Color of the entry's background.
+        - ``hlcolor``: (string) Color of the entry's highlight.
+        - ``activehlcolor``: (string) Color of the entry's highlight when active.
+        - ``hlsize``: (float) Size of the entry's highlight.
     """
     
     intext = StringVar(root)
@@ -297,6 +498,7 @@ def mkEntry(root, **kwargs):
     cursorfg = kwargs['cursorfg'] if 'cursorfg' in kwargs else "Black"
     fg = kwargs['fg'] if 'fg' in kwargs else "Black"
 
+    show = kwargs['show'] if 'show' in kwargs else None
     width = kwargs['width'] if 'width' in kwargs else None
     relief = kwargs['relief'] if 'relief' in kwargs else None
     bg = kwargs['bg'] if 'bg' in kwargs else None
@@ -306,6 +508,7 @@ def mkEntry(root, **kwargs):
 
     entry.config(font=font, border=border, insertbackground=cursorfg, insertwidth=cursorwidth, fg=fg)
 
+    if show != None: entry['show'] = show
     if width != None: entry['width'] = width
     if relief != None: entry['relief'] = relief
     if bg != None: entry['bg'] = bg
@@ -317,13 +520,43 @@ def mkEntry(root, **kwargs):
 
     return entry, intext
 
-def mkScale(root, start, end, orient, **kwargs):
+def mkScale(root: _TKObject, start: _Intvar=0, end: _Intvar=1, orient: _Orientvar="horizontal", **kwargs):
     """
-        Author: Udayshankar R
-
         Creates and returns a scale widget.
 
-        KWARGS: default: float, text: str, mindist: float, width: float, length: float, font: tkinter.font, border: float, relief: str, troughcolor: str, activefg: str, fg: str, bg: str, hlcolor: str, hlsize: float
+        Parameters
+        ----------
+
+        - ``root``: (Tk, Toplevel) Window object to display the scale on.
+        - ``start``: (integer/float) Start position of the scale.
+        - ``end``: (integer/float) End position of the scale.
+        - ``orient``: (string) Orientation of the scale.
+            - ``'horizontal'`` or tkinter constant ``HORIZONTAL``: (string) Sets scale to horizontal orientation.
+            - ``'vertical'`` or tkinter constant ``VERTICAL``: (string) Sets scale to vertical orientation.
+
+        KWARGS:
+        -------
+
+        - ``default``: (integer/float) Default position of the scale.
+        - ``text``: (string) Text to show near the scale, depending on orientation.
+        - ``mindist``: (integer/float) Minimum distance the scale can travel.
+        - ``width``: (float) Width of the scale.
+        - ``length``: (float) Length of the scale.
+        - ``font``: (tkinter font) Font for the scale's text.
+        - ``border``: (float) Size of the scale's border.
+        - ``relief``: (string) Relief setting of the scale. See tkinter manual.
+                - ``'raised'``
+                - ``'sunken'``
+                - ``'flat'`` 
+                - ``'ridge'``
+                - ``'solid'``
+                - ``'groove'``
+        - ``troughcolor``: (string) Color of the scale's trough.
+        - ``fg``: (string) Color of the scale's foreground.
+        - ``bg``: (string) Color of the scale's background.
+        - ``activefg``: (string) Color of the scale's foreground when active.
+        - ``hlcolor``: (string) Color of the scale's highlight.
+        - ``hlsize``: (float) Size of the scale's highlight.
     """
 
     scale = Scale(root, from_=start, to=end, orient=orient)

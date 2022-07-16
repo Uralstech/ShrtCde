@@ -66,10 +66,10 @@ ___example___ = lambda:showinfo("EXAMPLE", "EXAMPLE")
 root = mkRoot("EXAMPLE", "900x900", img_path, minsize="200x200", maxsize="1200x1200", color="Yellow")
 toplevel1 = mkRoot("EXAMPLE", "300x300", mktoplevel=root, resize='x')
 toplevel2 = mkRoot("EXAMPLE", "300x300", mktoplevel=root, resize='y')
-toplevel3 = mkRoot("EXAMPLE", "300x400", mktoplevel=root, resize='xy')
+toplevel3 = mkRoot("EXAMPLE", "300x550", mktoplevel=root, resize='xy')
 mkMenu(root, {"func" : ___example___, "cascade" : {"func" : ___example___, 0:0, ("QUIT", "ctrl+q") : lambda:root.quit()}})
 
-mkLabel(root, text="label", width=20, height=2, font=mkFont("Terminal", 30, "bold", 1), border=5, relief="groove", fg="green", bg="red", hlcolor="blue", hlsize=5).pack()
+mkLabel(root, text="label", width=20, height=2, font=mkFont("Terminal", 30, "bold", underline=1), border=5, relief="groove", fg="green", bg="red", hlcolor="blue", hlsize=5).pack()
 
 mkLabel(toplevel1, text="example label", width=40).pack()
 a,b=mkLabel(toplevel1, image=img_path, imagewidth=200, imageheight=200, width=300, height=200)
@@ -89,7 +89,7 @@ a.pack()
 a,b=mkButton(root, function=___example___, image=img_path, width=300, height=200, activefg="blue", activebg="red")
 print("line34: ", b.name, type(b))
 a.pack()
-text=mkText(root, default="EXAMPLE", width=50, height=20, font=mkFont("Consolas", 30, "bold", slant="italic"), border=5, relief="raised", cursorwidth=10, cursorfg="red", fg="blue", bg="green", activehlcolor="white", hlcolor="black", hlsize=5)
+text=mkText(root, default="EXAMPLE", width=50, height=20, font=mkFont("Consolas", 30, "bold", "italic"), border=5, relief="raised", cursorwidth=10, cursorfg="red", fg="blue", bg="green", activehlcolor="white", hlcolor="black", hlsize=5)
 text.bind("<KeyRelease>", lambda x: print("line37: ", text.get('0.0', 'end')))
 text.pack()
 
@@ -97,8 +97,12 @@ entry,entryvar=mkEntry(toplevel3, default="EXAMPLE", width=15, font=mkFont("Time
 entry.bind("<KeyRelease>", lambda x: print("line41: ", entryvar.get()))
 entry.pack()
 
+entry2,entryvar2=mkEntry(toplevel3, default="EXAMPLE", show='*', width=15, font=mkFont("Times New Roman"), border=10, relief="sunken", cursorwidth=20, cursorfg="blue", fg="green", bg="red", hlcolor="yellow", activehlcolor="pink", hlsize=20)
+entry2.bind("<KeyRelease>", lambda x: print("line45: ", entryvar2.get()))
+entry2.pack()
+
 def show():
-    showinfo("EXAMPLE", "line45:  " + str(dropvar.get()) + "\t" + str(type(dropvar)))
+    showinfo("EXAMPLE", "line49:  " + str(dropvar.get()) + "\t" + str(type(dropvar)))
 
 # Try changing "vartype" below.
 #If it's an int, GetDropdown will return an IntVar,
