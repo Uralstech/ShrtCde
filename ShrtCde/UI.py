@@ -23,7 +23,7 @@ _Slantvar: TypeAlias = Literal['roman', 'italic']
 _Orientvar: TypeAlias = Literal["horizontal", "vertical"]
 
 
-def mkRoot(title='ShrtCde window', size='500x500', image: _Textvar=None, mktoplevel: _Rootvar=None, **kwargs):
+def mkRoot(title='ShrtCde window', size='500x500', image: _Textvar=None, mktoplevel: _Rootvar=None, **kwargs) -> _TKObject:
     """
         Creates a Tkinter window and returns the Tk/Toplevel object.
 
@@ -85,17 +85,17 @@ def mkFont(family="Calibri", size=15, weight: _Weightvar="normal", slant: _Slant
         - ``family``: (string) Font family for the font object.
         - ``size``: (integer) Size for the font object.
         - ``weight``: (string) Weight setting for the font object.
-                - 'normal': (string) Normal weight setting for the font object.
-                - 'bold': (string) Bold weight setting for the font object.
+                - ``'normal'``: (string) Normal weight setting for the font object.
+                - ``'bold'``: (string) Bold weight setting for the font object.
         - ``slant``: (string) Slant setting for the font object.
-                - 'roman': (string) Normal slant setting for the font object.
-                - 'italic': (string) Italic slant setting for the font object.
+                - ``'roman'``: (string) Normal slant setting for the font object.
+                - ``'italic'``: (string) Italic slant setting for the font object.
         - ``underline``: (integer) Underline setting for the font object.
-                - 0: (integer) Removes underline setting for the font object.
-                - 1: (integer) Adds underline setting for the font object.
+                - ``0``: (integer) Removes underline setting for the font object.
+                - ``1``: (integer) Adds underline setting for the font object.
         - ``overstrike``: (integer) Overstrike setting for the font object.
-                - 0: (integer) Removes overstrike setting for the font object.
-                - 1: (integer) Adds overstrike setting for the font object.
+                - ``0``: (integer) Removes overstrike setting for the font object.
+                - ``1``: (integer) Adds overstrike setting for the font object.
     """
 
     font = f.Font(family=family, size=size, weight=weight, underline=underline, overstrike=overstrike, slant=slant)
@@ -152,7 +152,7 @@ def mkMenu(root: _TKObject, commands: dict) -> tuple[Menu, list[Union[Menu, None
     root.config(menu=menu)
     return menu, submenus
 
-def mkLabel(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwargs):
+def mkLabel(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwargs) -> Union[Label, tuple[Label, PhotoImage]]:
     """
         Creates and returns a Tkinter label. If image path is included, also returns image object.
 
@@ -227,7 +227,7 @@ def mkLabel(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwargs
     if img == None: return label
     else: return label, img
 
-def mkText(root: _TKObject, **kwargs):
+def mkText(root: _TKObject, **kwargs) -> Text:
     """
         Creates and returns a Tkinter text widget.
 
@@ -292,7 +292,7 @@ def mkText(root: _TKObject, **kwargs):
 
     return text
 
-def mkButton(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwargs):
+def mkButton(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwargs) -> Union[Button, tuple[Button, PhotoImage]]:
     """
         Creates and returns a tkinter button. If image path is included, also returns image object.
 
@@ -369,7 +369,7 @@ def mkButton(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwarg
     if img == None: return button
     else: return button, img
 
-def mkDropdown(root: _TKObject, options: _Listvar, **kwargs):
+def mkDropdown(root: _TKObject, options: _Listvar, **kwargs) -> tuple[OptionMenu, Union[IntVar, DoubleVar, BooleanVar, StringVar]]:
     """
         Creates and returns a tkinter dropdown with StringVar/IntVar/DoubleVar/BooleanVar.
 
@@ -447,11 +447,9 @@ def mkDropdown(root: _TKObject, options: _Listvar, **kwargs):
     if hlcolor != None: dropdown['highlightbackground'] = hlcolor
     if hlsize != None: dropdown['highlightthickness'] = hlsize
 
-    dropdown.pack()
-
     return dropdown, clicked
 
-def mkEntry(root: _TKObject, **kwargs):
+def mkEntry(root: _TKObject, **kwargs) -> tuple[Entry, StringVar]:
     """
         Creates and returns a tkinter entry with StringVar.
         
@@ -520,7 +518,7 @@ def mkEntry(root: _TKObject, **kwargs):
 
     return entry, intext
 
-def mkScale(root: _TKObject, start: _Intvar=0, end: _Intvar=1, orient: _Orientvar="horizontal", **kwargs):
+def mkScale(root: _TKObject, start: _Intvar=0, end: _Intvar=1, orient: _Orientvar="horizontal", **kwargs) -> Scale:
     """
         Creates and returns a scale widget.
 
