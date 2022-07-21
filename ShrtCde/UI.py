@@ -25,7 +25,7 @@ _Orientvar: TypeAlias = Literal["horizontal", "vertical"]
 
 def mkRoot(title='ShrtCde window', size='500x500', image: _Textvar=None, mktoplevel: _Rootvar=None, **kwargs) -> _TKObject:
     """
-        Creates a Tkinter window and returns the Tk/Toplevel object.
+        Creates a Tkinter window and returns the Tk / Toplevel object.
 
         Parameters
         ----------
@@ -369,22 +369,107 @@ def mkButton(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwarg
     if img == None: return button
     else: return button, img
 
+def mkRadiobutton(root: _TKObject, variable: Union[StringVar, IntVar, DoubleVar, BooleanVar]=None, value=None, text: _Textvar=None, image: _Textvar=None, **kwargs) -> Union[Radiobutton, tuple[Radiobutton, PhotoImage]]:
+    """
+        Creates and returns a tkinter radio button. If image path is included, also returns image object.
+
+        Parameters
+        ----------
+
+        - ``root``: (Tk, Toplevel) Window object to display the radio button on.
+        - ``variable``: (StringVar, IntVar, DoubleVar, BooleanVar) The var which will be manipulated by the radio button.
+        - ``value``: (Any) The value assigned to the radio button.
+        - ``text``: (string) Text to display on the radio button.
+        - ``image``: (string) Path to an image to display on the radio button.
+        - NOTE: Only use text OR image. Both cannot be used.
+
+        KWARGS:
+        -------
+
+        - ``indicator``: (integer) Indicator value of the radio button.
+            - ``0``
+            - ``1``
+        - ``default``: (string) Default selected option of the radio button.
+        - ``function``: (function) Function to assign to the radio button.
+        - ``width``: (float) Width of the radio button.
+        - ``height``: (float) Height of the radio button.
+        - ``imgwidth``: (float) Width of the radio button's image.
+        - ``imgheight``: (float) Height of the radio button's image.
+        - ``font``: (tkinter font) Font for the radio button's text.
+        - ``border``: (float) Size of the radio button's border.
+        - ``relief``: (string) Relief setting of the radio button. See tkinter manual.
+                - ``'raised'``
+                - ``'sunken'``
+                - ``'flat'`` 
+                - ``'ridge'``
+                - ``'solid'``
+                - ``'groove'``
+        - ``fg``: (string) Color of the radio button's foreground.
+        - ``bg``: (string) Color of the radio button's background.
+        - ``activefg``: (string) Color of the radio button's foreground when active.
+        - ``activebg``: (string) Color of the radio button's background when active.
+        - ``selectbg``: (string) Color of the radio button's background when selected.
+    """
+
+    border = kwargs['border'] if 'border' in kwargs else 1
+    indicator = kwargs['indicator'] if 'indicator' in kwargs else 1
+
+    font = kwargs['font'] if 'font' in kwargs else mkFont()
+
+    fg = kwargs['fg'] if 'fg' in kwargs else "Black"
+    activefg = kwargs['activefg'] if 'activefg' in kwargs else "Black"
+    activebg = kwargs['activebg'] if 'activebg' in kwargs else "White"
+    selectbg = kwargs['selectbg'] if 'selectbg' in kwargs else "White"
+
+    default = kwargs['default'] if 'default' in kwargs else None
+    function = kwargs['function'] if 'function' in kwargs else None
+    width = kwargs['width'] if 'width' in kwargs else None
+    height = kwargs['height'] if 'height' in kwargs else None
+    imgwidth = kwargs['imgwidth'] if 'imgwidth' in kwargs else None
+    imgheight = kwargs['imgheight'] if 'imgheight' in kwargs else None
+    relief = kwargs['relief'] if 'relief' in kwargs else None
+    bg = kwargs['bg'] if 'bg' in kwargs else None
+
+    img = None
+    if text != None:
+        button = Radiobutton(root, text=text, font=font)
+    elif image != None:
+        img = PhotoImage(file=image)
+
+        if imgwidth != None: img.config(width=imgwidth)
+        if imgheight != None: img.config(height=imgheight)
+        
+        button = Radiobutton(root)
+        button.config(image=img)
+        button.image = img
+
+    button.config(variable=variable, value=value, indicator=indicator, border=border, fg=fg, activeforeground=activefg, activebackground=activebg, selectcolor=selectbg)
+    if default != None: variable.set(default)
+    if function != None: button.config(command=function)
+    if width != None: button['width'] = width
+    if height != None: button['height'] = height
+    if relief != None: button['relief'] = relief
+    if bg != None: button['bg'] = bg
+    
+    if img == None: return button
+    else: return button, img
+
 def mkDropdown(root: _TKObject, options: _Listvar, **kwargs) -> tuple[OptionMenu, Union[IntVar, DoubleVar, BooleanVar, StringVar]]:
     """
-        Creates and returns a tkinter dropdown with StringVar/IntVar/DoubleVar/BooleanVar.
+        Creates and returns a tkinter dropdown with StringVar / IntVar / DoubleVar / BooleanVar.
 
         
         Parameters
         ----------
 
         - ``root``: (Tk, Toplevel) Window object to display the dropdown on.
-        - ``options``: (list/tuple) Options for the dropdown.
+        - ``options``: (list, tuple) Options for the dropdown.
 
         KWARGS:
         -------
 
-        - ``vartype``: (string/integer/float) Object to tell the function what type of var to return.
-            - ``None``/string: Tells function to return StringVar.
+        - ``vartype``: (string, integer, float) Object to tell the function what type of var to return.
+            - ``None``, string: Tells function to return StringVar.
             - integer: Tells function to return IntVar.
             - float: Tells function to return FloatVar.
             - ``'BOOL'``: (string) Tells function to return BooleanVar.
@@ -526,8 +611,8 @@ def mkScale(root: _TKObject, start: _Intvar=0, end: _Intvar=1, orient: _Orientva
         ----------
 
         - ``root``: (Tk, Toplevel) Window object to display the scale on.
-        - ``start``: (integer/float) Start position of the scale.
-        - ``end``: (integer/float) End position of the scale.
+        - ``start``: (integer, float) Start position of the scale.
+        - ``end``: (integer, float) End position of the scale.
         - ``orient``: (string) Orientation of the scale.
             - ``'horizontal'`` or tkinter constant ``HORIZONTAL``: (string) Sets scale to horizontal orientation.
             - ``'vertical'`` or tkinter constant ``VERTICAL``: (string) Sets scale to vertical orientation.
@@ -535,9 +620,9 @@ def mkScale(root: _TKObject, start: _Intvar=0, end: _Intvar=1, orient: _Orientva
         KWARGS:
         -------
 
-        - ``default``: (integer/float) Default position of the scale.
+        - ``default``: (integer, float) Default position of the scale.
         - ``text``: (string) Text to show near the scale, depending on orientation.
-        - ``mindist``: (integer/float) Minimum distance the scale can travel.
+        - ``mindist``: (integer, float) Minimum distance the scale can travel.
         - ``width``: (float) Width of the scale.
         - ``length``: (float) Length of the scale.
         - ``font``: (tkinter font) Font for the scale's text.

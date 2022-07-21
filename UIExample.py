@@ -9,7 +9,7 @@ ___example___ = lambda:showinfo("EXAMPLE", "EXAMPLE")
 
 root = mkRoot("EXAMPLE", "900x900", img_path, minsize="200x200", maxsize="1200x1200", color="Yellow")
 toplevel1 = mkRoot("EXAMPLE", "300x300", mktoplevel=root, resize='x')
-toplevel2 = mkRoot("EXAMPLE", "300x300", mktoplevel=root, resize='y')
+toplevel2 = mkRoot("EXAMPLE", "300x670", mktoplevel=root, resize='y')
 toplevel3 = mkRoot("EXAMPLE", "300x550", mktoplevel=root, resize='xy')
 mkMenu(root, {"func" : ___example___, "cascade" : {"func" : ___example___, 0:0, ("QUIT", "ctrl+q") : lambda:root.quit()}})
 
@@ -58,6 +58,13 @@ drop.pack()
 
 slider=mkScale(toplevel3, 0, 1, HORIZONTAL, default=0.5, text="EXAMPLE", mindist=0.01, width=40, length=200, font=mkFont(size=30), border=5, relief="groove", troughcolor="blue", activefg="green", fg="red", bg="yellow", hlcolor="purple", hlsize=5)
 slider.pack()
+
+mkLabel(toplevel2, "RADIOBUTTON EXAMPLE").pack()
+v = StringVar(toplevel2)
+mkRadiobutton(toplevel2, v, "EXAMPLE 1", image="C:/users/asus/downloads/lambda.png", imgwidth=80, imgheight=80, indicator=1, function=lambda:print(v.get()), width=100, height=100, border=10, relief='flat', fg="red", bg="green", activefg="grey", activebg="red")[0].pack()
+mkRadiobutton(toplevel2, v, "EXAMPLE 2", text="EXAMPLE 2", indicator=1, function=lambda:print(v.get()), font=mkFont("Arial Black"), width=20, height=2, border=10, relief='flat', fg="red", bg="green", activefg="grey", activebg="red", selectbg="green").pack()
+mkRadiobutton(toplevel2, v, "EXAMPLE 3", image="C:/users/asus/downloads/lambda.png", imgwidth=80, imgheight=80, indicator=0, function=lambda:print(v.get()), width=100, height=100, border=10, relief='flat', fg="red", bg="green", activefg="grey", activebg="red", selectbg="green")[0].pack()
+mkRadiobutton(toplevel2, v, "EXAMPLE 4", text="EXAMPLE 4", default="EXAMPLE 3", indicator=0, function=lambda:print(v.get()), font=mkFont("Arial Black"), width=20, height=2, border=10, relief='flat', fg="red", bg="green", activefg="grey", activebg="red").pack()
 
 root.bind("<Control-q>", lambda x: root.quit())
 root.mainloop()
