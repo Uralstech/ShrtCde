@@ -38,11 +38,11 @@ def writef(path: str, data: Union[list, tuple], settings: Literal['w', 'a', 'x']
         Parameters
         ----------
 
-        - ``path``: (string) Path to the file.\n
-        - ``settings``:
+        - ``path``: (string) Path to the file.
+        - ``settings``: (string) Write settings for the file.
                 - ``'w'``: (string) Overrides the whole file and writes data.
                 - ``'a'``: (string) Adds data to the file, without changing existing data.
-                - ``'x'``: (string) Creates a new file and writes data. Only works if no file with the same name exists at path.\n
+                - ``'x'``: (string) Creates a new file and writes data. Only works if no file with the same name exists at path.
         - ``encoding``: (string) Encoding to use when opening the file.
     """
 
