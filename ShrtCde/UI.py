@@ -142,7 +142,7 @@ def mkMenu(root: _TKObject, commands: dict) -> tuple[Menu, list[Union[Menu, None
             elif isinstance(commands[i], dict):
                 submenu = Menu(menu, tearoff=0)
                 for j in commands[i].keys():
-                    if str(j) not in '1234567890': 
+                    if str(j) not in '1234567890' or type(j) != int: 
                         if isinstance(j, tuple): submenu.add_command(label=str(j[0]), accelerator=str(j[1]), command=commands[i][j])
                         else: submenu.add_command(label=str(j), command=commands[i][j])
                     else: submenu.add_separator()
