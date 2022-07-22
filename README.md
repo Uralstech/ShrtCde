@@ -1,6 +1,8 @@
 # ShrtCde (ShortCode)
 A small python library for lazy devs. This shortens the amount of code you have to write for your program with the help of functions.
 
+VERSION: 0.4.6
+
 ## LICENSE
 This project uses the Apache-2.0 license. For more info, check LICENSE.
 
@@ -67,7 +69,7 @@ root = mkRoot("EXAMPLE", "900x900", img_path, minsize="200x200", maxsize="1200x1
 toplevel1 = mkRoot("EXAMPLE", "300x300", mktoplevel=root, resize='x')
 toplevel2 = mkRoot("EXAMPLE", "300x670", mktoplevel=root, resize='y')
 toplevel3 = mkRoot("EXAMPLE", "300x550", mktoplevel=root, resize='xy')
-mkMenu(root, {"func" : ___example___, "cascade" : {"func" : ___example___, 0:0, ("QUIT", "ctrl+q") : lambda:root.quit()}})
+mkMenu(root, {"func" : ___example___, "cascade" : {"func" : ___example___, 0:0, "func2" : ___example___, 1:0, ("QUIT", "ctrl+q") : lambda:root.quit()}})
 
 mkLabel(root, text="label", width=20, height=2, font=mkFont("Terminal", 30, "bold", underline=1), border=5, relief="groove", fg="green", bg="red", hlcolor="blue", hlsize=5).pack()
 
@@ -128,5 +130,5 @@ root.mainloop()
 
 All examples will also be available in the GitHub repo.
 
-### GITHUB
+### LINKS
 https://github.com/Uralstech/ShrtCde

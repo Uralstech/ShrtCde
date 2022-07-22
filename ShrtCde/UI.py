@@ -104,7 +104,7 @@ def mkFont(family="Calibri", size=15, weight: _Weightvar="normal", slant: _Slant
 
 def mkMenu(root: _TKObject, commands: dict) -> tuple[Menu, list[Union[Menu, None]]]:
     """
-        Creates a menu for the tkinter window. Returns the menu and a list of sub-menus, if any.
+        Creates a menu for the Tkinter window. Returns the menu and a list of sub-menus, if any.
 
         Parameters
         ----------
@@ -118,6 +118,7 @@ def mkMenu(root: _TKObject, commands: dict) -> tuple[Menu, list[Union[Menu, None
                     - Creates a cacade menu called 'cascade' with item 'foo' which calls 'bar'.
                 - ``{"cascade" : {"foo" : bar, 0:0, "quit" : bar}}``
                     - Creates seperator at '0:0' item in 'cascade'.
+                        - NOTE: Key for item '0:0' can be any INTEGER.
                 - ``{"cascade" : {("foo", "faa") : bar}}``
                     - Creates item 'foo' with accelerator 'faa' which calls 'bar'.
         
@@ -141,7 +142,7 @@ def mkMenu(root: _TKObject, commands: dict) -> tuple[Menu, list[Union[Menu, None
             elif isinstance(commands[i], dict):
                 submenu = Menu(menu, tearoff=0)
                 for j in commands[i].keys():
-                    if j != 0: 
+                    if str(j) not in '1234567890': 
                         if isinstance(j, tuple): submenu.add_command(label=str(j[0]), accelerator=str(j[1]), command=commands[i][j])
                         else: submenu.add_command(label=str(j), command=commands[i][j])
                     else: submenu.add_separator()
@@ -171,9 +172,9 @@ def mkLabel(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwargs
         - ``height``: (float) Height of the label.
         - ``imgwidth``: (float) Width of the label's image.
         - ``imgheight``: (float) Height of the label's image.
-        - ``font``: (tkinter font) Font for the label's text.
+        - ``font``: (Tkinter font) Font for the label's text.
         - ``border``: (float) Size of the label's border.
-        - ``relief``: (string) Relief setting of the label. See tkinter manual.
+        - ``relief``: (string) Relief setting of the label. See [***Tkinter manual***](https://docs.python.org/3/library/tkinter.html).
                 - ``'raised'``
                 - ``'sunken'``
                 - ``'flat'`` 
@@ -242,9 +243,9 @@ def mkText(root: _TKObject, **kwargs) -> Text:
         - ``default``: (string) Default text for the Text object.
         - ``width``: (float) Width of the Text object.
         - ``height``: (float) Height of the Text object.
-        - ``font``: (tkinter font) Font for the Text object's text.
+        - ``font``: (Tkinter font) Font for the Text object's text.
         - ``border``: (float) Size of the Text object's border.
-        - ``relief``: (string) Relief setting of the Text object. See tkinter manual.
+        - ``relief``: (string) Relief setting of the Text object. See [***Tkinter manual***](https://docs.python.org/3/library/tkinter.html).
                 - ``'raised'``
                 - ``'sunken'``
                 - ``'flat'`` 
@@ -294,7 +295,7 @@ def mkText(root: _TKObject, **kwargs) -> Text:
 
 def mkButton(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwargs) -> Union[Button, tuple[Button, PhotoImage]]:
     """
-        Creates and returns a tkinter button. If image path is included, also returns image object.
+        Creates and returns a Tkinter button. If image path is included, also returns image object.
 
         Parameters
         ----------
@@ -312,9 +313,9 @@ def mkButton(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwarg
         - ``height``: (float) Height of the button.
         - ``imgwidth``: (float) Width of the button's image.
         - ``imgheight``: (float) Height of the button's image.
-        - ``font``: (tkinter font) Font for the button's text.
+        - ``font``: (Tkinter font) Font for the button's text.
         - ``border``: (float) Size of the button's border.
-        - ``relief``: (string) Relief setting of the button. See tkinter manual.
+        - ``relief``: (string) Relief setting of the button. See [***Tkinter manual***](https://docs.python.org/3/library/tkinter.html).
                 - ``'raised'``
                 - ``'sunken'``
                 - ``'flat'`` 
@@ -371,7 +372,7 @@ def mkButton(root: _TKObject, text: _Textvar=None, image: _Textvar=None, **kwarg
 
 def mkRadiobutton(root: _TKObject, variable: Union[StringVar, IntVar, DoubleVar, BooleanVar]=None, value=None, text: _Textvar=None, image: _Textvar=None, **kwargs) -> Union[Radiobutton, tuple[Radiobutton, PhotoImage]]:
     """
-        Creates and returns a tkinter radio button. If image path is included, also returns image object.
+        Creates and returns a Tkinter radio button. If image path is included, also returns image object.
 
         Parameters
         ----------
@@ -395,9 +396,9 @@ def mkRadiobutton(root: _TKObject, variable: Union[StringVar, IntVar, DoubleVar,
         - ``height``: (float) Height of the radio button.
         - ``imgwidth``: (float) Width of the radio button's image.
         - ``imgheight``: (float) Height of the radio button's image.
-        - ``font``: (tkinter font) Font for the radio button's text.
+        - ``font``: (Tkinter font) Font for the radio button's text.
         - ``border``: (float) Size of the radio button's border.
-        - ``relief``: (string) Relief setting of the radio button. See tkinter manual.
+        - ``relief``: (string) Relief setting of the radio button. See [***Tkinter manual***](https://docs.python.org/3/library/tkinter.html).
                 - ``'raised'``
                 - ``'sunken'``
                 - ``'flat'`` 
@@ -456,7 +457,7 @@ def mkRadiobutton(root: _TKObject, variable: Union[StringVar, IntVar, DoubleVar,
 
 def mkDropdown(root: _TKObject, options: _Listvar, **kwargs) -> tuple[OptionMenu, Union[IntVar, DoubleVar, BooleanVar, StringVar]]:
     """
-        Creates and returns a tkinter dropdown with StringVar / IntVar / DoubleVar / BooleanVar.
+        Creates and returns a Tkinter dropdown with StringVar / IntVar / DoubleVar / BooleanVar.
 
         
         Parameters
@@ -476,9 +477,9 @@ def mkDropdown(root: _TKObject, options: _Listvar, **kwargs) -> tuple[OptionMenu
         - ``function``: (function) Function to assign to the dropdown.
         - ``width``: (float) Width of the dropdown.
         - ``height``: (float) Height of the dropdown.
-        - ``font``: (tkinter font) Font for the dropdown's text.
+        - ``font``: (Tkinter font) Font for the dropdown's text.
         - ``border``: (float) Size of the dropdown's border.
-        - ``relief``: (string) Relief setting of the dropdown. See tkinter manual.
+        - ``relief``: (string) Relief setting of the dropdown. See [***Tkinter manual***](https://docs.python.org/3/library/tkinter.html).
                 - ``'raised'``
                 - ``'sunken'``
                 - ``'flat'`` 
@@ -536,7 +537,7 @@ def mkDropdown(root: _TKObject, options: _Listvar, **kwargs) -> tuple[OptionMenu
 
 def mkEntry(root: _TKObject, **kwargs) -> tuple[Entry, StringVar]:
     """
-        Creates and returns a tkinter entry with StringVar.
+        Creates and returns a Tkinter entry with StringVar.
         
         Parameters
         ----------
@@ -551,9 +552,9 @@ def mkEntry(root: _TKObject, **kwargs) -> tuple[Entry, StringVar]:
             - Example:
                 - ``show='*'``: Every character entered in the entry will be replaced with the *.
         - ``width``: (float) Width of the entry.
-        - ``font``: (tkinter font) Font for the entry's text.
+        - ``font``: (Tkinter font) Font for the entry's text.
         - ``border``: (float) Size of the entry's border.
-        - ``relief``: (string) Relief setting of the entry. See tkinter manual.
+        - ``relief``: (string) Relief setting of the entry. See [***Tkinter manual***](https://docs.python.org/3/library/tkinter.html).
                 - ``'raised'``
                 - ``'sunken'``
                 - ``'flat'`` 
@@ -605,7 +606,7 @@ def mkEntry(root: _TKObject, **kwargs) -> tuple[Entry, StringVar]:
 
 def mkScale(root: _TKObject, start: _Intvar=0, end: _Intvar=1, orient: _Orientvar="horizontal", **kwargs) -> Scale:
     """
-        Creates and returns a scale widget.
+        Creates and returns a Tkinter scale widget.
 
         Parameters
         ----------
@@ -614,8 +615,8 @@ def mkScale(root: _TKObject, start: _Intvar=0, end: _Intvar=1, orient: _Orientva
         - ``start``: (integer, float) Start position of the scale.
         - ``end``: (integer, float) End position of the scale.
         - ``orient``: (string) Orientation of the scale.
-            - ``'horizontal'`` or tkinter constant ``HORIZONTAL``: (string) Sets scale to horizontal orientation.
-            - ``'vertical'`` or tkinter constant ``VERTICAL``: (string) Sets scale to vertical orientation.
+            - ``'horizontal'`` or Tkinter constant ``HORIZONTAL``: (string) Sets scale to horizontal orientation.
+            - ``'vertical'`` or Tkinter constant ``VERTICAL``: (string) Sets scale to vertical orientation.
 
         KWARGS:
         -------
@@ -625,9 +626,9 @@ def mkScale(root: _TKObject, start: _Intvar=0, end: _Intvar=1, orient: _Orientva
         - ``mindist``: (integer, float) Minimum distance the scale can travel.
         - ``width``: (float) Width of the scale.
         - ``length``: (float) Length of the scale.
-        - ``font``: (tkinter font) Font for the scale's text.
+        - ``font``: (Tkinter font) Font for the scale's text.
         - ``border``: (float) Size of the scale's border.
-        - ``relief``: (string) Relief setting of the scale. See tkinter manual.
+        - ``relief``: (string) Relief setting of the scale. See [***Tkinter manual***](https://docs.python.org/3/library/tkinter.html).
                 - ``'raised'``
                 - ``'sunken'``
                 - ``'flat'`` 
