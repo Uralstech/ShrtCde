@@ -1,4 +1,5 @@
 from ShrtCde.IO import *
+from os.path import isfile
 
 # Feel free to mess around with the function values!
 
@@ -20,7 +21,7 @@ path = input("Enter file path (read): ")
 encoding = input("Enter encoding of data: (default: utf-8)")
 encoding = encoding if encoding != "" else "utf8"
 
-if not findf(path):
+if not isfile(path):
     print("File was not found.")
     input()
     quit()

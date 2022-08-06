@@ -22,14 +22,11 @@ def readf(path: str, settings: Literal['r', 'rl', 'rls']='r', encoding='utf8') -
         - ``encoding``: (string) Encoding to use when opening the file.
     """
 
-    read = []
-
     with open(path, 'r', encoding=encoding) as file:
-        if settings == 'r': read = file.read()
-        elif settings == 'rl': read = file.readline()
-        elif settings == 'rls': read = list(file.readlines())
+        if settings == 'r': return file.read()
+        elif settings == 'rl': return file.readline()
+        elif settings == 'rls': return file.readlines()
 
-    return read
 
 def writef(path: str, data: Union[list, tuple], settings: Literal['w', 'a', 'x']='w', encoding='utf8') -> None:
     """
@@ -39,6 +36,7 @@ def writef(path: str, data: Union[list, tuple], settings: Literal['w', 'a', 'x']
         ----------
 
         - ``path``: (string) Path to the file.
+        - ``data``: (list, tuple) Data to write to the file. ``writef`` will add the new lines ('\\n') for you.
         - ``settings``: (string) Write settings for the file.
                 - ``'w'``: (string) Overrides the whole file and writes data.
                 - ``'a'``: (string) Adds data to the file, without changing existing data.
@@ -46,24 +44,4 @@ def writef(path: str, data: Union[list, tuple], settings: Literal['w', 'a', 'x']
         - ``encoding``: (string) Encoding to use when opening the file.
     """
 
-    with open(path, settings, encoding=encoding) as file:
-        for i in data:
-            file.write(i + '\n')
-
-def findf(path: str) -> bool:
-    """
-        Checks if file at path exists.
-        Returns True if it does; otherwise False.
-
-        Parameters
-        ----------
-
-        - ``path``: (string) Path to the file.
-    """
-
-    try:
-        file = open(path, "r")
-        file.close()
-        return True
-    except:
-        return False
+    with open(path, settings, encoding=encoding) as file: file.write('\n'.join(data))
